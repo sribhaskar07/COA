@@ -1,0 +1,4 @@
+flat assembler  version 1.64
+C:\emu8086\MyBuild\noname.com.~asm [17]:
+      mov al,num1;moving num1 to al register 
+error: value out of range.

@@ -1,0 +1,54 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+noname.com -- emu8086 assembler version: 4.08  
+ 
+[ 8/19/2024  --  10:12:53 PM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       org 100h
+[   2]    0100: 18                                    num1 db 18h
+[   3]    0101: 18                                    num2 db 18h
+[   4]    0102:                                       start:
+[   5]    0102: A0 00 01                              mov al,num1;moving num1 to al register
+[   6]    0105: 02 06 01 01                           add al,num2;moving num2 to al register(i.e, num1 and num2 are in al)
+[   7]    0109: 8A D8                                 mov bl,al ;coping al value to bl,storing for the result dispaly
+[   8]    010B: 8A E0                                 mov ah,al;coping al values to ah,(converting upper nibble 4bit to get character)
+[   9]    010D: 80 E4 F0                              and ah,0F0h; mask the lower nibble(i.e,converting lower nibble to 0)
+[  10]    0110: D0 EC D0 EC D0 EC D0 EC               shr ah,4;shifting right by 4 to get upper nibble
+[  11]    0118: 80 C4 30                              add ah,30h;(converting to ascii digit)
+[  12]    011B: 80 FC 39                              cmp ah,39h;compare ah value,if it is less than 39h
+[  13]    011E: 7E 03                                 jle print_first_digit
+[  14]    0120: 80 C4 07                              add ah,7;convert to ascii
+[  15]        :                                       
+[  16]    0123:                                       print_first_digit:
+[  17]    0123: 8A D4                                 mov dl,ah;coping ah value to dl for printing first digit
+[  18]    0125: B4 02                                 mov ah,02h;BIOS interrupt to display character
+[  19]    0127: CD 21                                 int 21h
+[  20]        :                                       ;converting lowwer nibble 4bit to character
+[  21]    0129: 8A E3                                 mov ah,bl;coping bl values to ah
+[  22]    012B: 80 E4 0F                              and ah,0Fh; mask the upper nibble(i.e,converting upper nibble to 0)
+[  23]    012E: 80 C4 30                              add ah,30h;(converting to ascii digit)
+[  24]    0131: 80 FC 39                              cmp ah,39h;compare ah value,if it is less than 39h
+[  25]        :                                       
+[  26]    0134: 7E 03                                 jle print_second_digit
+[  27]    0136: 80 C4 07                              add ah,7;convert to ascii
+[  28]        :                                       
+[  29]    0139:                                       print_second_digit:
+[  30]    0139: 8A D4                                 mov dl,ah;coping ah value to dl for printing first digit
+[  31]    013B: B4 02                                 mov ah,02h;BIOS interrupt to display character
+[  32]    013D: CD 21                                 int 21h
+[  33]    013F: B4 4C                                 mov ah,4Ch
+[  34]    0141: CD 21                                 int 21h
+[  35]        :                                       
+[  36]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
