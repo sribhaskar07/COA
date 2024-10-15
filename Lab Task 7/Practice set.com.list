@@ -1,0 +1,62 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Practice set.com -- emu8086 assembler version: 4.08  
+ 
+[ 10/10/2024  --  9:37:19 AM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       ORG 100h  ; This tells the assembler that the program will start at memory address 100h
+[   2]        :                                       
+[   3]    0100:                                       START:
+[   4]        :                                       ; Taking the first single-digit integer input
+[   5]    0100: B4 01                                 MOV AH, 1        ; Function to take single character input
+[   6]    0102: CD 21                                 INT 21h          ; Interrupt to take input from keyboard
+[   7]    0104: 2C 30                                 SUB AL, 30h      ; Convert ASCII to integer (subtract 30h from the ASCII value of 0)
+[   8]    0106: 8A D8                                 MOV BL, AL       ; Store the first number in BL
+[   9]        :                                       
+[  10]        :                                       ; Taking the second single-digit integer input
+[  11]    0108: B4 01                                 MOV AH, 1        ; Function to take single character input
+[  12]    010A: CD 21                                 INT 21h          ; Interrupt to take input from keyboard
+[  13]    010C: 2C 30                                 SUB AL, 30h      ; Convert ASCII to integer
+[  14]    010E: 8A F8                                 MOV BH, AL       ; Store the second number in BH
+[  15]        :                                       
+[  16]        :                                       ; Perform the subtraction: BL - BH
+[  17]    0110: 8A C3                                 MOV AL, BL       ; Move first number (BL) to AL
+[  18]    0112: 2A C7                                 SUB AL, BH       ; Subtract second number (BH) from AL
+[  19]        :                                       
+[  20]        :                                       ; If the result is negative, we handle the display differently
+[  21]    0114: 3C 00                                 CMP AL, 0
+[  22]    0116: 7D 08                                 JGE POSITIVE     ; If result is positive or zero, jump to POSITIVE
+[  23]        :                                       
+[  24]    0118:                                       NEGATIVE:
+[  25]        :                                       ; Handle the negative case
+[  26]    0118: F6 D8                                 NEG AL           ; Convert result to positive for display
+[  27]    011A: B2 2D                                 MOV DL, '-'      ; Load '-' into DL for printing the minus sign
+[  28]    011C: B4 02                                 MOV AH, 2        ; Function to print a character
+[  29]    011E: CD 21                                 INT 21h          ; Interrupt to print '-'
+[  30]        :                                       
+[  31]    0120:                                       POSITIVE:
+[  32]        :                                       ; Convert result to ASCII for display
+[  33]    0120: 04 30                                 ADD AL, 30h      ; Convert integer result to ASCII
+[  34]    0122: 8A D0                                 MOV DL, AL       ; Move result to DL for printing
+[  35]    0124: B4 02                                 MOV AH, 2        ; Function to print a character
+[  36]    0126: CD 21                                 INT 21h          ; Interrupt to print result
+[  37]        :                                       
+[  38]        :                                       ; End the program
+[  39]    0128: B4 4C                                 MOV AH, 4Ch      ; Function to terminate the program
+[  40]    012A: CD 21                                 INT 21h          ; Interrupt to terminate
+[  41]        :                                       
+[  42]        :                                       END START
+[  43]        :                                       
+[  44]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================

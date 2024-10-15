@@ -1,0 +1,39 @@
+ORG 100h
+
+START:
+
+MOV AH, 1
+INT 21h
+
+
+SUB AL, 30h
+
+
+CMP AL, 9
+JG INVALID
+
+
+ADD AL, 30h
+
+MOV DL, AL
+MOV AH, 2
+INT 21h
+
+MOV AH, 4Ch
+INT 21h
+
+INVALID:
+
+MOV DX, OFFSET MSG
+MOV AH, 9
+INT 21h
+JMP START
+
+MSG DB 'Invalid input, please enter a digit (0-9) $'
+
+END START
+
+
+
+
+; [SOURCE]: C:\emu8086\MyBuild\Lab Task 7\mycode.asm

@@ -1,0 +1,44 @@
+ORG 100h  ; This tells the assembler that the program will start at memory address 100h
+
+START:
+; Taking the first single-digit integer input
+MOV AH, 1        ; Function to take single character input
+INT 21h          ; Interrupt to take input from keyboard
+SUB AL, 30h      ; Convert ASCII to integer (subtract 30h from the ASCII value of 0)
+MOV BL, AL       ; Store the first number in BL
+
+; Taking the second single-digit integer input
+MOV AH, 1        ; Function to take single character input
+INT 21h          ; Interrupt to take input from keyboard
+SUB AL, 30h      ; Convert ASCII to integer
+MOV BH, AL       ; Store the second number in BH
+
+; Perform the subtraction: BL - BH
+MOV AL, BL       ; Move first number (BL) to AL
+SUB AL, BH       ; Subtract second number (BH) from AL
+
+; If the result is negative, we handle the display differently
+CMP AL, 0
+JGE POSITIVE     ; If result is positive or zero, jump to POSITIVE
+
+NEGATIVE:
+; Handle the negative case
+NEG AL           ; Convert result to positive for display
+MOV DL, '-'      ; Load '-' into DL for printing the minus sign
+MOV AH, 2        ; Function to print a character
+INT 21h          ; Interrupt to print '-'
+
+POSITIVE:
+; Convert result to ASCII for display
+ADD AL, 30h      ; Convert integer result to ASCII
+MOV DL, AL       ; Move result to DL for printing
+MOV AH, 2        ; Function to print a character
+INT 21h          ; Interrupt to print result
+
+; End the program
+MOV AH, 4Ch      ; Function to terminate the program
+INT 21h          ; Interrupt to terminate
+
+END START
+
+

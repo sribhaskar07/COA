@@ -1,0 +1,68 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+noname.com -- emu8086 assembler version: 4.08  
+ 
+[ 10/10/2024  --  10:20:08 AM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       ORG 100h           ; Origin, to specify that the program starts at 100h (COM file format)
+[   2]        :                                       
+[   3]        :                                       ; Display message "Enter a digit: "
+[   4]    0100: BA 2D 01                              MOV DX, OFFSET msg_input  ; Load the address of the message
+[   5]    0103: B4 09                                 MOV AH, 09h        ; Function 09h of INT 21h is used to display a string
+[   6]    0105: CD 21                                 INT 21h            ; Call DOS interrupt to print the message
+[   7]        :                                       
+[   8]        :                                       ; Read a single character from the user
+[   9]    0107: B4 01                                 MOV AH, 01h        ; Function 01h of INT 21h is used to read a character
+[  10]    0109: CD 21                                 INT 21h            ; Call DOS interrupt to get the character
+[  11]        :                                       
+[  12]        :                                       ; Check if the character is a digit (0-9)
+[  13]    010B: 3C 30                                 CMP AL, '0'        ; Compare AL with '0'
+[  14]    010D: 7C 13                                 JL NotDigit        ; If the input is less than '0', it is not a digit
+[  15]    010F: 3C 39                                 CMP AL, '9'        ; Compare AL with '9'
+[  16]    0111: 7F 0F                                 JG NotDigit        ; If the input is greater than '9', it is not a digit
+[  17]        :                                       
+[  18]        :                                       ; Print the message "The Integer you entered is: "
+[  19]    0113: BA 3D 01                              MOV DX, OFFSET msg_integer  ; Load the address of the integer message
+[  20]    0116: B4 09                                 MOV AH, 09h        ; Function 09h of INT 21h is used to display a string
+[  21]    0118: CD 21                                 INT 21h            ; Call DOS interrupt to print the integer message
+[  22]        :                                       
+[  23]        :                                       ; Print the entered integer
+[  24]    011A: 8A D0                                 MOV DL, AL         ; Move the entered integer to DL
+[  25]    011C: B4 02                                 MOV AH, 02h        ; Function 02h of INT 21h is used to print a single character
+[  26]    011E: CD 21                                 INT 21h            ; Call DOS interrupt to print the character
+[  27]    0120: EB 07                                 JMP EndProgram     ; Jump to the end of the program
+[  28]        :                                       
+[  29]    0122:                                       NotDigit:
+[  30]        :                                       ; If the input is not a digit, display an error message
+[  31]    0122: BA 5C 01                              MOV DX, OFFSET msg_error  ; Load the address of the error message
+[  32]    0125: B4 09                                 MOV AH, 09h        ; Function 09h of INT 21h is used to display a string
+[  33]    0127: CD 21                                 INT 21h            ; Call DOS interrupt to print the error message
+[  34]        :                                       
+[  35]    0129:                                       EndProgram:
+[  36]        :                                       ; Terminate the program
+[  37]    0129: B4 4C                                 MOV AH, 4Ch        ; Function 4Ch of INT 21h terminates the program
+[  38]    012B: CD 21                                 INT 21h            ; Call DOS interrupt to exit
+[  39]        :                                       
+[  40]    012D: 45 6E 74 65 72 20 61 20 64 69 67 69   msg_input  DB 'Enter a digit: $'                          ; Input message, terminated by $
+                74 3A 20 24                         
+[  41]    013D: 0D 0A 54 68 65 20 49 6E 74 65 67 65   msg_integer DB 0Dh, 0Ah, 'The Integer you entered is: $'  ; Output message, terminated by $
+                72 20 79 6F 75 20 65 6E 74 65 72 65 
+                64 20 69 73 3A 20 24                
+[  42]    015C: 0D 0A 45 72 72 6F 72 3A 20 4E 6F 74   msg_error  DB 0Dh, 0Ah, 'Error: Not a digit! $'           ; Error message, terminated by $
+                20 61 20 64 69 67 69 74 21 20 24    
+[  43]        :                                       
+[  44]        :                                       END                ; End of program
+[  45]        :                                       
+[  46]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
