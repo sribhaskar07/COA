@@ -1,0 +1,41 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+numbers 0-9.com -- emu8086 assembler version: 4.08  
+ 
+[ 11/5/2024  --  2:30:34 PM ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       org 100h
+[   2]        :                                       
+[   3]        :                                       
+[   4]        :                                       
+[   5]    0100:                                       main proc
+[   6]    0100: 8C C8                                 mov ax, @data      ; Initialize data segment
+[   7]    0102: 8E D8                                 mov ds, ax
+[   8]        :                                       
+[   9]    0104: B9 0A 00                              mov cx, 10         ; Set loop counter to 10 for numbers 0-9
+[  10]    0107: B2 30                                 mov dl, '0'        ; Start with ASCII character '0'
+[  11]        :                                       
+[  12]    0109:                                       print_loop:
+[  13]    0109: B4 02                                 mov ah, 2          ; Function to display character in DOS
+[  14]    010B: CD 21                                 int 21h            ; Interrupt to print character in DL
+[  15]        :                                       
+[  16]    010D: FE C2                                 inc dl             ; Move to the next character ('0' to '9')
+[  17]    010F: E2 F8                                 loop print_loop    ; Decrement CX and loop until CX = 0
+[  18]        :                                       
+[  19]    0111: B4 4C                                 mov ah, 4Ch        ; Exit to DOS
+[  20]    0113: CD 21                                 int 21h
+[  21]        :                                       main endp
+[  22]        :                                       end main
+[  23]        :                                       
+ 
+===================================================================================================
+ 
+
+
+
+
+===================================================================================================
