@@ -1,0 +1,146 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+nth fibonaaci number.exe -- emu8086 assembler version: 4.08  
+ 
+[ 07-11-2024  --  10:18:09 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model small
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 45 6E 74 65 72 20 74 68 65 20 76 61   msg db 'Enter the value of n (0-9): $'      ; Message to prompt user
+                6C 75 65 20 6F 66 20 6E 20 28 30 2D 
+                39 29 3A 20 24                      
+[   5]    011D: 00                                    fib_res db ?                                ; To store nth Fibonacci term
+[   6]    011E: 00                                    n db ?                                      ; User input (single-digit number)
+[   7]    011F: 0D 0A 46 69 62 6F 6E 61 63 63 69 20   result_msg db 0Dh, 0Ah, 'Fibonacci term: $' ; Message to display result
+                74 65 72 6D 3A 20 24                
+[   8]    0132: 30 30 24 0D 0A                        result db '00$', 0Dh, 0Ah                   ; Space to store result as string
+[   9]        :                                       
+[  10]        :                                       .code
+[  11]    0140:                                       main:
+[  12]    0140: B8 10 00                              mov ax, @data
+[  13]    0143: 8E D8                                 mov ds, ax                ; Initialize data segment
+[  14]        :                                       
+[  15]        :                                       ; Display message to enter the value of n
+[  16]    0145: B4 09                                 mov ah, 09h
+[  17]    0147: BA 00 00                              lea dx, msg
+[  18]    014A: CD 21                                 int 21h
+[  19]        :                                       
+[  20]        :                                       ; Take single-digit input from user
+[  21]    014C: B4 01                                 mov ah, 01h
+[  22]    014E: CD 21                                 int 21h
+[  23]    0150: 2C 30                                 sub al, '0'               ; Convert ASCII to integer
+[  24]    0152: A2 1E 00                              mov n, al                 ; Store user input in 'n'
+[  25]        :                                       
+[  26]        :                                       ; Check if input is 0 or 1
+[  27]    0155: A0 1E 00                              mov al, n
+[  28]    0158: 3C 00                                 cmp al, 0
+[  29]    015A: 74 48                                 je fib_zero               ; If n = 0, set result to 0
+[  30]    015C: 3C 01                                 cmp al, 1
+[  31]    015E: 74 4B                                 je fib_one                ; If n = 1, set result to 1
+[  32]        :                                       
+[  33]        :                                       ; Initialize Fibonacci terms for calculation
+[  34]    0160: 8A C8                                 mov cl, al                ; Move n to CL for loop count
+[  35]    0162: B0 01                                 mov al, 1                 ; Set AL = 1 for F(1)
+[  36]    0164: B3 00                                 mov bl, 0                 ; Set BL = 0 for F(0)
+[  37]    0166: FE C9                                 dec cl                    ; Adjust count to loop n-1 times
+[  38]        :                                       
+[  39]    0168:                                       fib_loop:
+[  40]        :                                       ; Calculate next term: F(n) = F(n-1) + F(n-2)
+[  41]    0168: 8A E0                                 mov ah, al                ; Store current F(n-1) in AH
+[  42]    016A: 02 C3                                 add al, bl                ; AL = F(n) = F(n-1) + F(n-2)
+[  43]    016C: 8A DC                                 mov bl, ah                ; Update F(n-2) to previous F(n-1)
+[  44]    016E: FE C9                                 dec cl
+[  45]    0170: 75 F6                                 jnz fib_loop              ; Loop until CL becomes zero (reached nth term)
+[  46]        :                                       
+[  47]        :                                       ; Store the nth Fibonacci term in fib_res
+[  48]    0172: A2 1D 00                              mov fib_res, al
+[  49]        :                                       
+[  50]    0175:                                       display_result:
+[  51]        :                                       ; Display result message
+[  52]    0175: B4 09                                 mov ah, 09h
+[  53]    0177: BA 1F 00                              lea dx, result_msg
+[  54]    017A: CD 21                                 int 21h
+[  55]        :                                       
+[  56]        :                                       ; Convert result to ASCII and store in 'result' for correct display
+[  57]    017C: A0 1D 00                              mov al, fib_res
+[  58]    017F: D4 0A                                 aam                       ; Split AL into AH (tens) and AL (units)
+[  59]    0181: 80 C4 30                              add ah, '0'               ; Convert tens to ASCII
+[  60]    0184: 04 30                                 add al, '0'               ; Convert units to ASCII
+[  61]    0186: 88 26 32 00                           mov result[0], ah         ; Store tens digit in result
+[  62]    018A: A2 33 00                              mov result[1], al         ; Store units digit in result
+[  63]    018D: EB 0A                                 jmp display_final
+[  64]        :                                       
+[  65]    018F:                                       single_digit:
+[  66]    018F: 04 30                                 add al, '0'               ; Convert single digit to ASCII
+[  67]    0191: A2 32 00                              mov result[0], al         ; Store single digit in result
+[  68]    0194: C6 06 33 00 24                        mov result[1], '$'        ; Add end-of-string marker
+[  69]        :                                       
+[  70]    0199:                                       display_final:
+[  71]        :                                       ; Display the result
+[  72]    0199: BA 32 00                              lea dx, result
+[  73]    019C: B4 09                                 mov ah, 09h
+[  74]    019E: CD 21                                 int 21h
+[  75]        :                                       
+[  76]        :                                       ; End the program
+[  77]    01A0: B4 4C                                 mov ah, 4Ch
+[  78]    01A2: CD 21                                 int 21h
+[  79]        :                                       
+[  80]    01A4:                                       fib_zero:
+[  81]    01A4: C6 06 1D 00 00                        mov fib_res, 0            ; F(0) = 0
+[  82]    01A9: EB CA                                 jmp display_result
+[  83]        :                                       
+[  84]    01AB:                                       fib_one:
+[  85]    01AB: C6 06 1D 00 01                        mov fib_res, 1            ; F(1) = 1
+[  86]    01B0: EB C3                                 jmp display_result
+[  87]        :                                       
+[  88]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: B2      -   bytes on last page (l.byte)
+0003: 01      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: 58      -   check sum (l.byte)
+0013: 0F      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 14      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 14      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

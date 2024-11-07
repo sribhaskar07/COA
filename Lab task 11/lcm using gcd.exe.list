@@ -1,0 +1,153 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+lcm using gcd.exe -- emu8086 assembler version: 4.08  
+ 
+[ 07-11-2024  --  09:54:57 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .model small
+[   2]        :                                       .stack 100h
+[   3]        :                                       .data
+[   4]    0100: 02                                    num1 db  2         ; First number (single byte)
+[   5]    0101: 04                                    num2 db 4          ; Second number (single byte)
+[   6]    0102: 00                                    gcd_res db 0       ; To store GCD result (single byte)
+[   7]    0103: 00 00                                 lcm_res dw 0       ; To store LCM result (two bytes for larger result)
+[   8]    0105: 47 43 44 3A 20 24                     msg_gcd db 'GCD: $'
+[   9]    010B: 4C 43 4D 3A 20 24                     msg_lcm db 'LCM: $'
+[  10]        :                                       
+[  11]        :                                       .code
+[  12]    0120:                                       main:
+[  13]    0120: B8 10 00                              mov ax, @data
+[  14]    0123: 8E D8                                 mov ds, ax         ; Initialize data segment
+[  15]        :                                       
+[  16]        :                                       ; Display message for GCD
+[  17]    0125: B4 09                                 mov ah, 09h        ; DOS function to display string
+[  18]    0127: BA 05 00                              lea dx, msg_gcd
+[  19]    012A: CD 21                                 int 21h
+[  20]        :                                       
+[  21]        :                                       ; Load num1 and num2 into AL and BL for GCD calculation
+[  22]    012C: A0 00 00                              mov al, num1
+[  23]    012F: 8A 1E 01 00                           mov bl, num2
+[  24]    0133: E8 2E 00                              call gcd           ; Calculate GCD of num1 and num2
+[  25]    0136: A2 02 00                              mov gcd_res, al    ; Store GCD in gcd_res
+[  26]        :                                       
+[  27]        :                                       ; Display GCD result
+[  28]    0139: A0 02 00                              mov al, gcd_res
+[  29]    013C: E8 38 00                              call display_result
+[  30]        :                                       
+[  31]        :                                       ; Calculate LCM using (num1 * num2) / GCD
+[  32]    013F: A0 00 00                              mov al, num1       ; Load num1 into AL
+[  33]    0142: B4 00                                 mov ah, 0          ; Clear AH for 16-bit multiplication
+[  34]    0144: 8A 16 01 00                           mov dl, num2       ; Load num2 into DL
+[  35]    0148: F6 E2                                 mul dl             ; AX = num1 * num2 (result in AX)
+[  36]        :                                       
+[  37]        :                                       ; Divide AX by the GCD (stored in gcd_res)
+[  38]    014A: 8A 0E 02 00                           mov cl, gcd_res    ; Load GCD into CL
+[  39]    014E: F6 F1                                 div cl             ; AX = (num1 * num2) / GCD
+[  40]        :                                       
+[  41]        :                                       ; Store the result in lcm_res
+[  42]    0150: A3 03 00                              mov lcm_res, ax
+[  43]        :                                       
+[  44]        :                                       ; Display message for LCM
+[  45]    0153: B4 09                                 mov ah, 09h        ; DOS function to display string
+[  46]    0155: BA 0B 00                              lea dx, msg_lcm
+[  47]    0158: CD 21                                 int 21h
+[  48]        :                                       
+[  49]        :                                       ; Display LCM result
+[  50]    015A: A1 03 00                              mov ax, lcm_res
+[  51]    015D: E8 17 00                              call display_result
+[  52]        :                                       
+[  53]        :                                       ; End the program
+[  54]    0160: B4 4C                                 mov ah, 4Ch
+[  55]    0162: CD 21                                 int 21h
+[  56]        :                                       
+[  57]        :                                       ; Function to calculate GCD using the Euclidean algorithm
+[  58]    0164:                                       gcd proc
+[  59]    0164: 80 FB 00                              cmp bl, 0
+[  60]    0167: 74 0D                                 je end_gcd         ; If BL = 0, GCD is in AL
+[  61]        :                                       
+[  62]    0169:                                       gcd_loop:
+[  63]    0169: B4 00                                 mov ah, 0
+[  64]    016B: F6 F3                                 div bl             ; Divide AL by BL, remainder in AH
+[  65]    016D: 8A C3                                 mov al, bl         ; Move BL to AL (new A)
+[  66]    016F: 8A DC                                 mov bl, ah         ; Move remainder to BL (new B)
+[  67]    0171: 80 FB 00                              cmp bl, 0
+[  68]    0174: 75 F3                                 jne gcd_loop       ; Repeat until remainder (B) = 0
+[  69]        :                                       
+[  70]    0176:                                       end_gcd:
+[  71]    0176: C3                                    ret                ; Final GCD is in AL
+[  72]        :                                       gcd endp
+[  73]        :                                       
+[  74]        :                                       ; Function to display a number in AX as decimal
+[  75]    0177:                                       display_result proc
+[  76]    0177: BB 0A 00                              mov bx, 10         ; Divisor for decimal conversion
+[  77]    017A: 33 C9                                 xor cx, cx         ; Clear CX to use as counter for digits
+[  78]        :                                       
+[  79]    017C:                                       convert_loop:
+[  80]    017C: 33 D2                                 xor dx, dx         ; Clear DX for division
+[  81]    017E: F7 F3                                 div bx             ; Divide AX by 10, remainder in DX (last digit)
+[  82]    0180: 52                                    push dx            ; Push remainder onto stack
+[  83]    0181: 41                                    inc cx             ; Increment digit counter
+[  84]    0182: 3D 00 00                              cmp ax, 0          ; Check if quotient is 0
+[  85]    0185: 75 F5                                 jne convert_loop   ; If not, continue dividing
+[  86]        :                                       
+[  87]    0187:                                       print_digits:
+[  88]    0187: 5A                                    pop dx             ; Pop digit from stack
+[  89]    0188: 80 C2 30                              add dl, '0'        ; Convert to ASCII
+[  90]    018B: B4 02                                 mov ah, 02h        ; DOS function to display character
+[  91]    018D: CD 21                                 int 21h            ; Display digit
+[  92]    018F: E2 F6                                 loop print_digits  ; Repeat for all digits
+[  93]        :                                       
+[  94]    0191: C3                                    ret
+[  95]        :                                       display_result endp
+[  96]        :                                       
+[  97]        :                                       end main
+[  98]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 92      -   bytes on last page (l.byte)
+0003: 01      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 01      -   SP - stack pointer (h.byte)
+0012: 19      -   check sum (l.byte)
+0013: 1D      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 12      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 12      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

@@ -1,0 +1,23 @@
+< THE SYMBOL TABLE >  nth fibonaaci number.exe  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
+DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
+MSG                      	00000     	1         	VAR       	data      
+FIB_RES                  	0001D     	1         	VAR       	data      
+N                        	0001E     	1         	VAR       	data      
+RESULT_MSG               	0001F     	1         	VAR       	data      
+RESULT                   	00032     	1         	VAR       	data      
+CODE                     	00014     	-5        	SEGMENT   	(ITSELF)  
+MAIN                     	00000     	-1        	LABEL     	code      
+FIB_LOOP                 	00028     	-1        	LABEL     	code      
+DISPLAY_RESULT           	00035     	-1        	LABEL     	code      
+SINGLE_DIGIT             	0004F     	-1        	LABEL     	code      
+DISPLAY_FINAL            	00059     	-1        	LABEL     	code      
+FIB_ZERO                 	00064     	-1        	LABEL     	code      
+FIB_ONE                  	0006B     	-1        	LABEL     	code      
+===================================================================================================
+[ 07-11-2024  --  10:18:09 ] 
+< END >
+ 

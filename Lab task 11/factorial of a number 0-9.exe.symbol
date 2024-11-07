@@ -1,0 +1,21 @@
+< THE SYMBOL TABLE >  factorial of a number 0-9.exe  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
+DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
+MSG                      	00000     	1         	VAR       	data      
+RESULT_MSG               	00024     	1         	VAR       	data      
+RESULT                   	00032     	1         	VAR       	data      
+NUM                      	0003A     	1         	VAR       	data      
+FACT                     	0003B     	2         	VAR       	data      
+CODE                     	00014     	-5        	SEGMENT   	(ITSELF)  
+MAIN                     	00000     	-1        	LABEL     	code      
+FACTORIAL_LOOP           	0001F     	-1        	LABEL     	code      
+END_FACTORIAL_LOOP       	00028     	-1        	LABEL     	code      
+DISPLAY_FACTORIAL        	0002B     	-1        	LABEL     	code      
+CONVERT_TO_ASCII         	0003B     	-1        	LABEL     	code      
+===================================================================================================
+[ 07-11-2024  --  10:55:42 ] 
+< END >
+ 

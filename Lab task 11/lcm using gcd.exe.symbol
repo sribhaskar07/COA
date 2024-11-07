@@ -1,0 +1,24 @@
+< THE SYMBOL TABLE >  lcm using gcd.exe  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
+DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
+NUM1                     	00000     	1         	VAR       	data      
+NUM2                     	00001     	1         	VAR       	data      
+GCD_RES                  	00002     	1         	VAR       	data      
+LCM_RES                  	00003     	2         	VAR       	data      
+MSG_GCD                  	00005     	1         	VAR       	data      
+MSG_LCM                  	0000B     	1         	VAR       	data      
+CODE                     	00012     	-5        	SEGMENT   	(ITSELF)  
+MAIN                     	00000     	-1        	LABEL     	code      
+GCD                      	00044     	-1        	NEAR      	code      
+GCD_LOOP                 	00049     	-1        	LABEL     	code      
+END_GCD                  	00056     	-1        	LABEL     	code      
+DISPLAY_RESULT           	00057     	-1        	NEAR      	code      
+CONVERT_LOOP             	0005C     	-1        	LABEL     	code      
+PRINT_DIGITS             	00067     	-1        	LABEL     	code      
+===================================================================================================
+[ 07-11-2024  --  09:54:57 ] 
+< END >
+ 
